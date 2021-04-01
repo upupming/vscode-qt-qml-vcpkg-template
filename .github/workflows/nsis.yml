@@ -1,0 +1,129 @@
+name: vscode-qt-qml-vcpkg-template Windows Installer
+
+on:
+  push:
+  release:
+    types: [prereleased]
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  check_commit_msg:
+    outputs:
+      commit_message: ${{ steps.get_message.outputs.message }}
+    name: Check if the workflow has been disabled.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get commit message
+        id: get_message
+        run: |
+          echo "::set-output name=message::$(git log --format=%B -n 1 ${{ github.event.after }})"
+          echo "::set-env name=message::$(git log --format=%B -n 1 ${{ github.event.after }})"
+  build:
+    needs: check_commit_msg
+    if: ${{ !contains( needs.check_commit_msg.outputs.commit_message, 'NO_NSIS') }}
+    strategy:
+      matrix:
+        qt_version: [5.15.0]
+        platform: [windows-latest]
+        arch: [
+            # x86,
+            x64,
+          ]
+        include:
+          # x86 is get error (qt cannot be installed)
+          # - platform: windows-latest
+          #   arch: x86
+          #   qtarch: win32_msvc2019
+          - platform: windows-latest
+            arch: x64
+            qtarch: win64_msvc2019_64
+      fail-fast: false
+
+    runs-on: ${{ matrix.platform }}
+    env:
+      _vscode-qt-qml-vcpkg-template_BUILD_INFO_: 'vscode-qt-qml-vcpkg-template built from Github Action'
+      _vscode-qt-qml-vcpkg-template_BUILD_EXTRA_INFO_: 'qt${{ matrix.qt_version }}-${{ github.sha }}-ci.${{ matrix.platform }}'
+
+    steps:
+      - name: Get the version
+        id: get_version
+        shell: bash
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      - name: Checking out sources
+        uses: actions/checkout@v2
+      - name: Install Python 3.7 version
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+          architecture: ${{ matrix.arch }}
+      - name: Restoring submodules
+        run: git submodule update --init
+      # =========================================================================================================
+      - name: Install MSVC compiler
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          # 14.1 is for vs2017, 14.2 is vs2019, following the upstream vcpkg build from vscode-qt-qml-vcpkg-template-deps repo
+          toolset: 14.2
+          arch: ${{ matrix.arch }}
+
+      # Restore from cache the previously built ports. If cache-miss, download and build vcpkg (aka "bootstrap vcpkg").
+      - name: Restore from cache and install vcpkg
+        # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
+        uses: lukka/run-vcpkg@v6
+        with:
+          vcpkgGitCommitId: ed54efbb16ae8a457296c7a7e1462a9f54571e94
+          setupOnly: true
+      # Now that vcpkg is installed, it is being used to run with the desired arguments.
+      # https://unix.stackexchange.com/a/378991/319953
+      - run: |
+          $VCPKG_ROOT/vcpkg install sqlite3:x64-windows
+          echo $VCPKG_ROOT
+          VCPKG_ROOT_BAK=$((echo $VCPKG_ROOT | sed 's#\\#/#g') )
+          sed -i -e "s#C:/src/vcpkg#$VCPKG_ROOT_BAK#g" CMakeLists.txt
+        shell: bash
+
+      - name: Cache Qt
+        id: cache-qt
+        uses: actions/cache@v1
+        with:
+          path: ../Qt
+          key: QtCache-${{ matrix.platform }}-${{ matrix.arch }}-${{ matrix.qt_version }}
+      - name: Installing Qt - ${{ matrix.arch }}
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: ${{ matrix.qt_version }}
+          arch: ${{ matrix.qtarch }}
+          mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
+          cached: ${{ steps.cache-qt.outputs.cache-hit }}
+      # =========================================================================================================
+      - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - Setup Ninja
+        if: matrix.platform == 'windows-latest'
+        uses: ashutoshvarma/setup-ninja@master
+        with:
+          # ninja version to download. Default: 1.10.0
+          version: 1.10.0
+      # ========================================================================================================= Generate MakeFile and Build
+      - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - Generate Dependencies and Build
+        shell: bash
+        env:
+          CC: cl.exe
+          CXX: cl.exe
+        # https://stackoverflow.com/questions/31262342/cmake-g-ninja-on-windows-specify-x64?rq=1
+        run: |
+          mkdir build
+          cd build
+          cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --target all --parallel $(nproc)
+          windeployqt.exe --release --qmldir .. ./vscode-qt-qml-vcpkg-template.exe
+      - name: Windows - Get package name
+        shell: bash
+        id: get_package
+        run: |
+          echo ::set-output name=NAME::$(basename build/vscode-qt-qml-vcpkg-template-*.exe)
+      - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: vscode-qt-qml-vcpkg-template-windows-${{ matrix.arch }}-qt-${{ matrix.qt_version }}
+          path: build

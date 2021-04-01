@@ -1,0 +1,21 @@
+{
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0}",
+  "cSpell.words": [
+    "vcpkg",
+    "windeploy"
+  ],
+  "files.associations": {
+    "*.lyx": "tex",
+    "*.bib": "bibtex",
+    "*.cjson": "jsonc",
+    "*.wxss": "css",
+    "*.wxs": "javascript",
+    "*.vertexshader": "glsl",
+    "*.fragmentshader": "glsl",
+    "*.in": "plaintext",
+    "qqmlapplicationengine": "cpp"
+  },
+  // It is fine to use qt's or msvc's cmake
+  "cmake.cmakePath": "C:\\Qt\\Tools\\CMake_64\\bin\\cmake.exe"
+}

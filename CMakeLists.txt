@@ -1,0 +1,71 @@
+cmake_minimum_required(VERSION 3.14)
+
+# Setup vcpkg script with CMake (note: should be placed before project() call)
+set(CMAKE_TOOLCHAIN_FILE C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
+
+# # Directory with source code
+# add_subdirectory(src)
+
+set(PROJECT "vscode-qt-qml-vcpkg-template")
+project(${PROJECT} LANGUAGES CXX)
+
+
+set(CMAKE_PREFIX_PATH "C:/Qt/5.15.2/msvc2019_64")
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR}QuickCompiler)
+message(STATUS "QT_FOUND ${QT_FOUND}")
+message(STATUS "QT_CONFIG ${QT_CONFIG}")
+message(STATUS "QT_CONSIDERED_CONFIGS ${QT_CONSIDERED_CONFIGS}")
+message(STATUS "QT_CONSIDERED_VERSIONS ${QT_CONSIDERED_VERSIONS}")
+message(STATUS "Qt5Qml_INCLUDE_DIRS ${Qt5Qml_INCLUDE_DIRS}")
+message(STATUS "QT_VERSION_MAJOR ${QT_VERSION_MAJOR}")
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# QtCreator supports the following variables for Android, which are identical to qmake Android variables.
+# Check https://doc.qt.io/qt/deployment-android.html for more information.
+# They need to be set before the find_package(...) calls below.
+
+#if(ANDROID)
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+#    if (ANDROID_ABI STREQUAL "armeabi-v7a")
+#        set(ANDROID_EXTRA_LIBS
+#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libcrypto.so
+#            ${CMAKE_CURRENT_SOURCE_DIR}/path/to/libssl.so)
+#    endif()
+#endif()
+
+set(SRC_LIST
+        src/main.cpp
+        src/qml.qrc
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(${PROJECT}
+        ${SRC_LIST}
+        ${RESOURCES}
+    )
+else()
+    if(ANDROID)
+        add_library(${PROJECT} SHARED
+            ${SRC_LIST}
+        )
+    else()
+        add_executable(${PROJECT}
+          ${SRC_LIST}
+        )
+    endif()
+endif()
+
+target_compile_definitions(${PROJECT}
+  PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_link_libraries(${PROJECT}
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
