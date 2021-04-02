@@ -6,21 +6,19 @@
     {
       "label": "CMake Configure",
       "type": "shell",
-      "command": "C:\\Qt\\Tools\\CMake_64\\bin\\cmake.exe",
-      "args": ["-S", "${workspaceFolder}", "-B", "${workspaceFolder}/build"],
+      "command": "${workspaceFolder}/.scripts/configure.bat",
       "problemMatcher": []
     },
     {
       "label": "CMake Build",
       "type": "shell",
-      "command": "C:\\Qt\\Tools\\CMake_64\\bin\\cmake.exe",
-      "args": ["--build", "build", "--target", "ALL_BUILD"],
+      "command": "${workspaceFolder}/.scripts/build.bat",
       "problemMatcher": []
     },
     {
       "label": "Run windeploy",
       "type": "shell",
-      "command": "C:\\Qt\\5.15.2\\msvc2019_64\\bin\\windeployqt.exe --debug --qmldir .  ${workspaceFolder}/build/Debug/vscode-qt-qml-vcpkg-template.exe",
+      "command": "C:/Qt/5.15.2/msvc2019_64/bin/windeployqt.exe --debug --qmldir .  ${workspaceFolder}/build/Debug/vscode-qt-qml-vcpkg-template.exe",
       "args": [],
       "problemMatcher": []
     },

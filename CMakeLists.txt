@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Setup vcpkg script with CMake (note: should be placed before project() call)
-set(CMAKE_TOOLCHAIN_FILE C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake CACHE STRING "Vcpkg toolchain file")
+if(DEFINED ENV{VCPKG_ROOT})
+    set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+else()
+    set(CMAKE_TOOLCHAIN_FILE "C:/src/vcpkg-tooth/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+endif()
 
 # # Directory with source code
 # add_subdirectory(src)
 
 set(PROJECT "vscode-qt-qml-vcpkg-template")
 project(${PROJECT} LANGUAGES CXX)
-
 
 set(CMAKE_PREFIX_PATH "C:/Qt/5.15.2/msvc2019_64")
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)

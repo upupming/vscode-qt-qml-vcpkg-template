@@ -79,9 +79,6 @@ jobs:
       # https://unix.stackexchange.com/a/378991/319953
       - run: |
           $VCPKG_ROOT/vcpkg install sqlite3:x64-windows
-          echo $VCPKG_ROOT
-          VCPKG_ROOT_BAK=$((echo $VCPKG_ROOT | sed 's#\\#/#g') )
-          sed -i -e "s#C:/src/vcpkg#$VCPKG_ROOT_BAK#g" CMakeLists.txt
         shell: bash
 
       - name: Cache Qt
