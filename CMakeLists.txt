@@ -12,13 +12,11 @@ else()
     set(CMAKE_TOOLCHAIN_FILE "C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 endif()
 
-# # Directory with source code
-# add_subdirectory(src)
-
 set(PROJECT "vscode-qt-qml-vcpkg-template")
 project(${PROJECT} LANGUAGES CXX)
 
-set(CMAKE_PREFIX_PATH "C:/Qt/5.15.2/msvc2019_64")
+list(APPEND CMAKE_PREFIX_PATH "C:/Qt/5.15.2/msvc2019_64")
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR}QuickCompiler)
@@ -77,3 +75,7 @@ target_compile_definitions(${PROJECT}
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT}
   PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
+
+
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
+target_link_libraries(${PROJECT} PRIVATE unofficial::sqlite3::sqlite3)

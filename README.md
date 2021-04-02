@@ -18,6 +18,6 @@
 2. [Download Qt Installer](https://www.qt.io/download-open-source) and install latest Qt (current is `5.15.2` & `msvc2019_64`). qt5 installed with vcpkg [cannot build QML app](https://github.com/microsoft/vcpkg/issues/16983) now, so we manually install Qt.
 3. Clone vcpkg to `C:/src/vcpkg`, bootstrap, and install dependencies you needed.
 4. Run the [`CMake Configure` task](.vscode/tasks.json)
-5. If you build the exe for the first time, you should run [`Run windeploy` task](.vscode/tasks.json) to copy all necessary Qt libraries to the exe folder
+5. If you build the exe for **the first time**, you **must run [`Run windeploy` task](.vscode/tasks.json)** to copy all necessary Qt libraries to the exe folder
 6. Change the `main.cpp` and use `F5` or debug button on the left side bar to see the results. VSCode will build the exe and run `windeploy` on each debug session.
     - We use [`CMake Build`](.vscode/tasks.json) to build the exe.
