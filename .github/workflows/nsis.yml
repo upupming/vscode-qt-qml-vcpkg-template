@@ -1,4 +1,4 @@
-name: vscode-qt-qml-vcpkg-template Windows Installer
+name: Windows Build
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
     types: [prereleased]
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  name: vscode-qt-qml-vcpkg-template
 
 jobs:
   check_commit_msg:
@@ -42,9 +43,6 @@ jobs:
       fail-fast: false
 
     runs-on: ${{ matrix.platform }}
-    env:
-      _vscode-qt-qml-vcpkg-template_BUILD_INFO_: 'vscode-qt-qml-vcpkg-template built from Github Action'
-      _vscode-qt-qml-vcpkg-template_BUILD_EXTRA_INFO_: 'qt${{ matrix.qt_version }}-${{ github.sha }}-ci.${{ matrix.platform }}'
 
     steps:
       - name: Get the version
@@ -64,7 +62,7 @@ jobs:
       - name: Install MSVC compiler
         uses: ilammy/msvc-dev-cmd@v1
         with:
-          # 14.1 is for vs2017, 14.2 is vs2019, following the upstream vcpkg build from vscode-qt-qml-vcpkg-template-deps repo
+          # 14.1 is for vs2017, 14.2 is vs2019
           toolset: 14.2
           arch: ${{ matrix.arch }}
 
@@ -113,12 +111,12 @@ jobs:
           cd build
           cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
           cmake --build . --target all --parallel $(nproc)
-          windeployqt.exe --release --qmldir .. ./vscode-qt-qml-vcpkg-template.exe
+          windeployqt.exe --release --qmldir .. ./${{ env.name }}.exe
       - name: Set outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact
         uses: actions/upload-artifact@master
         with:
-          name: vscode-qt-qml-vcpkg-template-windows-${{ steps.vars.outputs.sha_short }}-${{ matrix.arch }}-qt-${{ matrix.qt_version }}
+          name: ${{ env.name }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}-qt-${{ matrix.qt_version }}
           path: build
