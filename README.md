@@ -2,13 +2,15 @@
 
 ## Advantages
 
-- Debugging & Code formatting on VSCode is much more faster
+- Debugging, Intelligence & Code formatting on VSCode is much more faster
 - Run `windeploy` on the fly.
+- Automatically build Release zip with GitHub Actions.
 
 ## Disadvantages
 
 - VSCode CMake build is slower than Qt Creator, however, you can use both VSCode and Qt Creator at the same time, just take the essence and discard the dregs.
     - If you [start VSCode in "x64 Native Tools Command Prompt for VS 2019"](https://code.visualstudio.com/docs/cpp/config-msvc), it will be much faster to run the configure and build task, because they [don't need to setup `vcvars64.bat`](.scripts/build.bat) any more.
+- No QML intelligence on VSCode, you can still use Qt Creator to write QML files.
 
 ## Getting started
 
