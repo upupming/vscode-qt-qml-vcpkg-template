@@ -114,13 +114,11 @@ jobs:
           cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release
           cmake --build . --target all --parallel $(nproc)
           windeployqt.exe --release --qmldir .. ./vscode-qt-qml-vcpkg-template.exe
-      - name: Windows - Get package name
-        shell: bash
-        id: get_package
-        run: |
-          echo ::set-output name=NAME::$(basename build/vscode-qt-qml-vcpkg-template-*.exe)
+      - name: Set outputs
+        id: vars
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact
         uses: actions/upload-artifact@master
         with:
-          name: vscode-qt-qml-vcpkg-template-windows-${{ matrix.arch }}-qt-${{ matrix.qt_version }}
+          name: vscode-qt-qml-vcpkg-template-windows-${{ steps.vars.outputs.sha_short }}-${{ matrix.arch }}-qt-${{ matrix.qt_version }}
           path: build
