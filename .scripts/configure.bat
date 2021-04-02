@@ -23,6 +23,6 @@ if not exist "%BuildDir%" mkdir "%BuildDir%"
 cd "%BuildDir%"
 
 :: Call CMake to configure the build (generates the build scripts)
-cmake -S %SrcDir% -B %BuildDir%
+cmake -S %SrcDir% -B %BuildDir% -GNinja
 
 exit

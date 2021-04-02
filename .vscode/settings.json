@@ -11,7 +11,8 @@
     "*.vertexshader": "glsl",
     "*.fragmentshader": "glsl",
     "*.in": "plaintext",
-    "qqmlapplicationengine": "cpp"
+    "qqmlapplicationengine": "cpp",
+    "qquickwindow": "cpp"
   },
   // It is fine to use qt's or msvc's cmake
   "cmake.configureOnOpen": false,
