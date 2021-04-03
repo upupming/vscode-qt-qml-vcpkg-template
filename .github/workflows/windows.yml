@@ -130,7 +130,7 @@ jobs:
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (whole zip)
         uses: actions/upload-artifact@master
         with:
-          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}
+          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}.zip
           path: build
 
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (only the exe)
