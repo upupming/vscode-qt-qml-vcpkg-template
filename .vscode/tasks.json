@@ -3,20 +3,34 @@
   // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
+    // https://stackoverflow.com/a/57470981/8242705
+    // https://github.com/microsoft/vscode-cmake-tools/issues/1680
     {
       "label": "CMake Configure",
       "type": "shell",
-      "command": "${workspaceFolder}/.scripts/configure.bat",
-      "problemMatcher": []
+      "command": "\"C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe\" --no-warn-unused-cli -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -H${workspaceFolder} -B${workspaceFolder}/build -G Ninja",
+      "problemMatcher": [],
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      }
     },
     {
       "label": "CMake Build",
-      "type": "shell",
-      "command": "${workspaceFolder}/.scripts/build.bat",
-      "problemMatcher": []
+      "type": "cmake",
+      "command": "build",
+      "problemMatcher": [],
+      "options": {
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
+      }
     },
     {
-      "label": "Run windeploy",
+      "label": "Run windeployqt",
       "type": "shell",
       "command": "C:/Qt/5.15.2/msvc2019_64/bin/windeployqt.exe --debug --qmldir .  ${workspaceFolder}/build/vscode-qt-qml-vcpkg-template.exe",
       "args": [],
