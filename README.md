@@ -1,6 +1,6 @@
 # vscode-qt-qml-vcpkg-template
 
-We use the manifest mode `vcpkg.json` to declare dependencies, just like `package.json` of npm. Clone the repo and vcpkg using:
+We use the manifest mode `vcpkg.json` to declare dependencies, just like `package.json` for npm. Clone the repo and vcpkg using:
 
 ```bash
 git clone --recurse-submodules https://github.com/upupming/vscode-qt-qml-vcpkg-template.git
@@ -20,10 +20,10 @@ git clone --recurse-submodules https://github.com/upupming/vscode-qt-qml-vcpkg-t
 
 ## Getting started
 
-1. Install latest visual studio 2019 with msvc compiler.
-2. [Download Qt Installer](https://www.qt.io/download-open-source) and install latest Qt (current is `5.15.2` & `msvc2019_64`). qt5 installed with vcpkg [cannot build QML app](https://github.com/microsoft/vcpkg/issues/16983) now, so we manually install Qt.
-3. Clone vcpkg to `C:/src/vcpkg`, bootstrap, and install dependencies you needed.
-4. Run the [`CMake Configure` task](.vscode/tasks.json)
-5. If you build the exe for **the first time**, you **must run [`Run windeploy` task](.vscode/tasks.json)** to copy all necessary Qt libraries to the exe folder
-6. Change the `main.cpp` and use `F5` or debug button on the left side bar to see the results. VSCode will build the exe and run `windeploy` on each debug session.
-    - We use [`CMake Build`](.vscode/tasks.json) to build the exe.
+1. Clone the repo.
+2. Install latest visual studio 2019 with msvc compiler.
+3. [Download Qt Installer](https://www.qt.io/download-open-source) and install latest Qt (current is `5.15.2` & `msvc2019_64`). qt5 installed with vcpkg [cannot build QML app](https://github.com/microsoft/vcpkg/issues/16983) now, so we manually install Qt.
+4. Run the [`CMake Configure` task](.vscode/tasks.json). (Don't use the CMake Tools' Configure command, which uses Visual Studio generator and is much more slower than Ninja.)
+5. If you build the exe for **the first time**, you **must run [`Run windeploy` task](.vscode/tasks.json)** to copy all necessary Qt libraries to the exe folder. Or the exe will crash on launch!
+6. Change the `main.cpp` and use `F5` or debug button on the left side bar to see the results. VSCode will run CMake to build the exe on each debug session.
+    - We use [`CMake Build` task](.vscode/tasks.json) to build the exe.
