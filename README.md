@@ -15,7 +15,6 @@ git clone --recurse-submodules https://github.com/upupming/vscode-qt-qml-vcpkg-t
 - Automatically build Release zip with GitHub Actions.
 - Cache all packages and get faster package installing speed on CI.
 - Use Ninja generator for faster build time, just as faster as the Qt Creator.
-    - If you [start VSCode in "x64 Native Tools Command Prompt for VS 2019"](https://code.visualstudio.com/docs/cpp/config-msvc), it will be much faster to run the configure and build task, because they [don't need to setup `vcvars64.bat`](.scripts/build.bat) any more.
 
 ## Disadvantages
 
