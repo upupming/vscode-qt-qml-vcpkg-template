@@ -74,11 +74,6 @@ jobs:
         uses: lukka/run-vcpkg@v6
         with:
           setupOnly: true
-      # Now that vcpkg is installed, it is being used to run with the desired arguments.
-      # https://unix.stackexchange.com/a/378991/319953
-      - run: |
-          $VCPKG_ROOT/vcpkg install sqlite3:x64-windows
-        shell: bash
 
       - name: Cache Qt
         id: cache-qt
