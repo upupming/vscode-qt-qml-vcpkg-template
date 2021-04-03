@@ -23,7 +23,7 @@ jobs:
           echo "::set-env name=message::$(git log --format=%B -n 1 ${{ github.event.after }})"
   build:
     needs: check_commit_msg
-    if: ${{ !contains( needs.check_commit_msg.outputs.commit_message, 'NO_NSIS') }}
+    if: ${{ !contains( needs.check_commit_msg.outputs.commit_message, 'NO_WIN') }}
     strategy:
       matrix:
         qt_version: [5.15.0]
@@ -51,6 +51,8 @@ jobs:
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
       - name: Checking out sources
         uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
       - name: Install Python 3.7 version
         uses: actions/setup-python@v1
         with:
@@ -71,7 +73,6 @@ jobs:
         # Download and build vcpkg, without installing any port. If content is cached already, it is a no-op.
         uses: lukka/run-vcpkg@v6
         with:
-          vcpkgGitCommitId: ed54efbb16ae8a457296c7a7e1462a9f54571e94
           setupOnly: true
       # Now that vcpkg is installed, it is being used to run with the desired arguments.
       # https://unix.stackexchange.com/a/378991/319953

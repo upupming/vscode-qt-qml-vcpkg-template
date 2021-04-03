@@ -4,12 +4,12 @@ cmake_minimum_required(VERSION 3.14)
 # https://code.visualstudio.com/docs/cpp/faq-cpp#_how-do-i-get-intellisense-to-work-correctly
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
-
+list(APPEND VCPKG_FEATURE_FLAGS "versions")
 # Setup vcpkg script with CMake (note: should be placed before project() call)
 if(DEFINED ENV{VCPKG_ROOT})
     set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 else()
-    set(CMAKE_TOOLCHAIN_FILE "C:/src/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
+    set(CMAKE_TOOLCHAIN_FILE "./vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE STRING "Vcpkg toolchain file")
 endif()
 
 set(PROJECT "vscode-qt-qml-vcpkg-template")
