@@ -130,11 +130,22 @@ jobs:
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (whole zip)
         uses: actions/upload-artifact@master
         with:
-          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}.zip
-          path: build
-
+          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}-package
+          path: |
+            build
+            !build/.cmake
+            !build/CMakeFiles
+            !build/cmake_install.cmake
+            !build/CMakeCache.txt
+            !build/.ninja_deps
+            !build/.ninja_log
+            !build/build.ninja
+            !build/**/*autogen*
+            !build/vcpkg_installed
+            !build/**/*.log
+            !build/compile_commands.json
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (only the exe)
         uses: actions/upload-artifact@master
         with:
-          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}.exe
+          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}-exe
           path: build/${{ env.name }}.exe

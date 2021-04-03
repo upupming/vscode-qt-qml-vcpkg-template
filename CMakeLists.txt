@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 # https://stackoverflow.com/a/50360945/8242705
 # https://code.visualstudio.com/docs/cpp/faq-cpp#_how-do-i-get-intellisense-to-work-correctly
-set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 list(APPEND VCPKG_FEATURE_FLAGS "versions")
 # Setup vcpkg script with CMake (note: should be placed before project() call)
