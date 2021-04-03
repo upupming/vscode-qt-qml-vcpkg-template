@@ -106,7 +106,7 @@ jobs:
           version: 1.10.0
       # ========================================================================================================= Generate MakeFile and Build
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - Generate Dependencies and Build
-        shell: bash
+        shell: powershell
         env:
           CC: cl.exe
           CXX: cl.exe
