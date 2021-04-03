@@ -116,11 +116,25 @@ jobs:
           cmake --build ${{ env.buildDir }} --target all --parallel $(nproc)
           cd ${{ env.buildDir }}
           windeployqt.exe --release --qmldir .. ./${{ env.name }}.exe
+
       - name: Set outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        with:
+          timeZone: 8
+          format: 'YYYY-MM-DD-HH-mm-ss'
+
+      - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (whole zip)
         uses: actions/upload-artifact@master
         with:
-          name: ${{ env.name }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}-qt-${{ matrix.qt_version }}
+          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}
           path: build
+
+      - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (only the exe)
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}.exe
+          path: build/${{ env.name }}.exe
