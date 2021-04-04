@@ -7,7 +7,12 @@ on:
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
   name: vscode-qt-qml-vcpkg-template
-  buildDir: ${{ github.workspace }}/build
+  # Disk C has 90GB free size, while disk D only has 11.3GB free disk size
+  # Override github envs, for vcpkg action to work properly: https://github.com/lukka/run-vcpkg/blob/36477d05567caebad06ad53713dcbde226135205/dist/index.js#L4891
+  GITHUB_WORKSPACE: C:/vscode-qt-qml-vcpkg-template
+  BUILD_SOURCESDIRECTORY: C:/vscode-qt-qml-vcpkg-template
+  srcDir: C:/vscode-qt-qml-vcpkg-template
+  buildDir: C:/vscode-qt-qml-vcpkg-template/build
 
 jobs:
   check_commit_msg:
@@ -51,16 +56,16 @@ jobs:
         shell: bash
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
       - name: Checking out sources
-        uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
+        shell: powershell
+        run: |
+          mkdir ${{ env.srcDir }}
+          git clone --recurse-submodules https://github.com/upupming/vscode-qt-qml-vcpkg-template.git ${{ env.srcDir }}
+          cd ${{ env.srcDir }}
       - name: Install Python 3.7 version
         uses: actions/setup-python@v1
         with:
           python-version: '3.7'
           architecture: ${{ matrix.arch }}
-      - name: Restoring submodules
-        run: git submodule update --init
       # =========================================================================================================
       - name: Install MSVC compiler
         uses: ilammy/msvc-dev-cmd@v1
@@ -77,7 +82,7 @@ jobs:
           # Just install vcpkg for now, do not install any ports in this step yet.
           setupOnly: true
           # Location of the vcpkg submodule in the Git repository.
-          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          vcpkgDirectory: '${{ env.srcDir }}/vcpkg'
           # Since the cache must be invalidated when content of the vcpkg.json file changes, let's
           # compute its hash and append this to the computed cache's key.
           appendedCacheKey: ${{ hashFiles( '**/vcpkg_manifest/vcpkg.json' ) }}
@@ -113,7 +118,7 @@ jobs:
         # https://stackoverflow.com/questions/31262342/cmake-g-ninja-on-windows-specify-x64?rq=1
         run: |
           Get-PsDrive
-          cmake -S . -B ${{ env.buildDir }} -GNinja -DCMAKE_BUILD_TYPE=Release
+          cmake -S ${{ env.srcDir }} -B ${{ env.buildDir }} -GNinja -DCMAKE_BUILD_TYPE=Release
           cmake --build ${{ env.buildDir }} --target all --parallel $(nproc)
           cd ${{ env.buildDir }}
           windeployqt.exe --release --qmldir .. ./${{ env.name }}.exe
@@ -121,7 +126,9 @@ jobs:
 
       - name: Set outputs
         id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+        run: |
+          cd ${{ env.srcDir }}
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Get Time
         id: time
         uses: nanzm/get-time-action@v1.1
