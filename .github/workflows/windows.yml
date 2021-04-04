@@ -112,10 +112,12 @@ jobs:
           CXX: cl.exe
         # https://stackoverflow.com/questions/31262342/cmake-g-ninja-on-windows-specify-x64?rq=1
         run: |
+          Get-PsDrive
           cmake -S . -B ${{ env.buildDir }} -GNinja -DCMAKE_BUILD_TYPE=Release
           cmake --build ${{ env.buildDir }} --target all --parallel $(nproc)
           cd ${{ env.buildDir }}
           windeployqt.exe --release --qmldir .. ./${{ env.name }}.exe
+          Get-PsDrive
 
       - name: Set outputs
         id: vars
