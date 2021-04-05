@@ -141,20 +141,20 @@ jobs:
         with:
           name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}-package
           path: |
-            build
-            !build/.cmake
-            !build/CMakeFiles
-            !build/cmake_install.cmake
-            !build/CMakeCache.txt
-            !build/.ninja_deps
-            !build/.ninja_log
-            !build/build.ninja
-            !build/**/*autogen*
-            !build/vcpkg_installed
-            !build/**/*.log
-            !build/compile_commands.json
+            ${{ env.buildDir }}
+            !${{ env.buildDir }}/.cmake
+            !${{ env.buildDir }}/CMakeFiles
+            !${{ env.buildDir }}/cmake_install.cmake
+            !${{ env.buildDir }}/CMakeCache.txt
+            !${{ env.buildDir }}/.ninja_deps
+            !${{ env.buildDir }}/.ninja_log
+            !${{ env.buildDir }}/build.ninja
+            !${{ env.buildDir }}/**/*autogen*
+            !${{ env.buildDir }}/vcpkg_installed
+            !${{ env.buildDir }}/**/*.log
+            !${{ env.buildDir }}/compile_commands.json
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (only the exe)
         uses: actions/upload-artifact@master
         with:
           name: ${{ env.name }}-${{ steps.time.outputs.time }}-${{ steps.vars.outputs.sha_short }}-windows-${{ matrix.arch }}-exe
-          path: build/${{ env.name }}.exe
+          path: ${{ env.buildDir }}/${{ env.name }}.exe
