@@ -33,7 +33,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
@@ -49,15 +49,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-set(SRC_LIST
-        src/main.cpp
-        src/qml.qrc
-)
+file(GLOB_RECURSE SRC_LIST RELATIVE ${CMAKE_SOURCE_DIR}
+    "src/*.cpp"
+    "src/*.qrc")
+# https://stackoverflow.com/a/57928919/8242705
+file(GLOB_RECURSE HEADER_LIST RELATIVE ${CMAKE_SOURCE_DIR}
+    "src/*.h")
+foreach(header_path ${HEADER_LIST})
+    GET_FILENAME_COMPONENT(header_dir ${header_path} PATH)
+    SET(header_dir_list ${header_dir_list} ${header_dir})
+endforeach()
+LIST(REMOVE_DUPLICATES header_dir_list)
+message(STATUS "SRC_LIST: ${SRC_LIST}")
+message(STATUS "header_dir_list: ${header_dir_list}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT}
         ${SRC_LIST}
-        ${RESOURCES}
     )
 else()
     if(ANDROID)
@@ -79,3 +87,7 @@ target_link_libraries(${PROJECT}
 
 find_package(unofficial-sqlite3 CONFIG REQUIRED)
 target_link_libraries(${PROJECT} PRIVATE unofficial::sqlite3::sqlite3)
+
+target_include_directories(${PROJECT}
+    PRIVATE
+    ${header_dir_list})

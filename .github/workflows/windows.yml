@@ -64,7 +64,7 @@ jobs:
       - name: Install Python 3.7 version
         uses: actions/setup-python@v1
         with:
-          python-version: '3.7'
+          python-version: "3.7"
           architecture: ${{ matrix.arch }}
       # =========================================================================================================
       - name: Install MSVC compiler
@@ -82,7 +82,7 @@ jobs:
           # Just install vcpkg for now, do not install any ports in this step yet.
           setupOnly: true
           # Location of the vcpkg submodule in the Git repository.
-          vcpkgDirectory: '${{ env.srcDir }}/vcpkg'
+          vcpkgDirectory: "${{ env.srcDir }}/vcpkg"
           # Since the cache must be invalidated when content of the vcpkg.json file changes, let's
           # compute its hash and append this to the computed cache's key.
           appendedCacheKey: ${{ hashFiles( '**/vcpkg_manifest/vcpkg.json' ) }}
@@ -134,7 +134,7 @@ jobs:
         uses: nanzm/get-time-action@v1.1
         with:
           timeZone: 8
-          format: 'YYYY-MM-DD-HH-mm-ss'
+          format: "YYYY-MM-DD-HH-mm-ss"
 
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (whole zip)
         uses: actions/upload-artifact@master
@@ -152,6 +152,7 @@ jobs:
             !${{ env.buildDir }}/**/*autogen*
             !${{ env.buildDir }}/vcpkg_installed
             !${{ env.buildDir }}/**/*.log
+            !${{ env.buildDir }}/*.manifest
             !${{ env.buildDir }}/compile_commands.json
       - name: Win-${{ matrix.arch }} - ${{ matrix.qt_version }} - uploading artifact (only the exe)
         uses: actions/upload-artifact@master
