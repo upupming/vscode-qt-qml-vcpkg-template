@@ -1,7 +1,7 @@
 {
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 0}",
-  "cSpell.words": ["vcpkg", "windeployqt"],
+  "cSpell.words": ["submodules", "vcpkg", "windeployqt"],
   "files.associations": {
     "*.lyx": "tex",
     "*.bib": "bibtex",
@@ -13,7 +13,8 @@
     "*.in": "plaintext",
     "qqmlapplicationengine": "cpp",
     "qquickwindow": "cpp",
-    "qguiapplication": "cpp"
+    "qguiapplication": "cpp",
+    "qquickitem": "cpp"
   },
   "cmake.configureOnOpen": false,
   "cmake.configureOnEdit": false,
@@ -22,5 +23,12 @@
   "cmake.generator": "Ninja",
   "files.exclude": {
     "vcpkg": true
+  },
+  // MSVC will warn on files with special characters like Chinese symbols if your file is not utf8-bom format
+  "[cpp]": {
+    "files.encoding": "utf8bom"
+  },
+  "[h]": {
+    "files.encoding": "utf8bom"
   }
 }
