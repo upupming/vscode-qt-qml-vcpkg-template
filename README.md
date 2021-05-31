@@ -8,6 +8,12 @@ We use the manifest mode `vcpkg.json` to declare dependencies, just like `packag
 git clone --recurse-submodules https://github.com/upupming/vscode-qt-qml-vcpkg-template.git
 ```
 
+Or run the following command after cloned the repo:
+
+```bash
+git submodule update --init
+```
+
 ## Advantages
 
 - Debugging, Intelligence & Code formatting on VSCode is much more faster
