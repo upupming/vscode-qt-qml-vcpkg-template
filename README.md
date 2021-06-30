@@ -2,6 +2,8 @@
 
 [![Windows Build](https://github.com/upupming/vscode-qt-qml-vcpkg-template/actions/workflows/windows.yml/badge.svg)](https://github.com/upupming/vscode-qt-qml-vcpkg-template/actions/workflows/windows.yml)
 
+## Template usage
+
 We use the manifest mode `vcpkg.json` to declare dependencies, just like `package.json` for npm. Clone the repo with vcpkg submodules using:
 
 ```bash
