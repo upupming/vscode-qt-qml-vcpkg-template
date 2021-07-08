@@ -6,6 +6,7 @@ on:
     types: [prereleased]
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  user: upupming
   name: vscode-qt-qml-vcpkg-template
   # Disk C has 90GB free size, while disk D only has 11.3GB free disk size
   # Override github envs, for vcpkg action to work properly: https://github.com/lukka/run-vcpkg/blob/36477d05567caebad06ad53713dcbde226135205/dist/index.js#L4891
@@ -55,12 +56,20 @@ jobs:
         id: get_version
         shell: bash
         run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-      - name: Checking out sources
-        shell: powershell
+
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ env.user }}/${{ env.name }}
+          submodules: recursive
+
+      - name: Copy sources
+        shell: bash
         run: |
-          mkdir ${{ env.srcDir }}
-          git clone --recurse-submodules https://github.com/upupming/vscode-qt-qml-vcpkg-template.git ${{ env.srcDir }}
-          cd ${{ env.srcDir }}
+          cp -r $GITHUB_WORKSPACE/. ${{ env.srcDir }}
+          ls ${{ env.srcDir }}/
+          ls ${{ env.srcDir }}/.git
+          ls ${{ env.srcDir }}/vcpkg
+
       - name: Install Python 3.7 version
         uses: actions/setup-python@v1
         with:

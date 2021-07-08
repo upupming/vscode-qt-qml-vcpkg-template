@@ -7,7 +7,7 @@
     "dependencies": [
         {
             "name": "sqlite3",
-            "version>=": "3.35.2",
+            "version>=": "3.35.5",
             "default-features": true,
             "platform": "windows & x64"
         }
