@@ -20,7 +20,7 @@
   "cmake.configureOnEdit": false,
   "cmake.cmakePath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe",
   // `Ninja` is much more faster than `Visual Studio`
-  "cmake.generator": "Ninja",
+  "cmake.generator": "Ninja Multi-Config",
   "files.exclude": {
     "vcpkg": true
   },
@@ -28,7 +28,19 @@
   "[cpp]": {
     "files.encoding": "utf8bom"
   },
+  "[cxx]": {
+    "files.encoding": "utf8bom"
+  },
+  "[c]": {
+    "files.encoding": "utf8bom"
+  },
+  "[cc]": {
+    "files.encoding": "utf8bom"
+  },
   "[h]": {
+    "files.encoding": "utf8bom"
+  },
+  "[hpp]": {
     "files.encoding": "utf8bom"
   }
 }

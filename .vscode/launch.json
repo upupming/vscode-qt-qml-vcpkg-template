@@ -5,16 +5,28 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(Windows) Launch",
+      "name": "Launch Debug",
       "type": "cppvsdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/vscode-qt-qml-vcpkg-template.exe",
+      "program": "${workspaceFolder}/build/Debug/vscode-qt-qml-vcpkg-template.exe",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/build/Debug/",
       "environment": [],
-      "console": "integratedTerminal",
-      "preLaunchTask": "Before Launch"
+      "console": "newExternalWindow",
+      "preLaunchTask": "CMake Build Debug"
+    },
+    {
+      "name": "Launch Release",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Release/vscode-qt-qml-vcpkg-template.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/build/Release/",
+      "environment": [],
+      "console": "newExternalWindow",
+      "preLaunchTask": "CMake Build Release"
     }
   ]
 }
