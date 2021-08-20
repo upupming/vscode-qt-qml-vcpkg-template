@@ -22,7 +22,7 @@
     {
       "label": "CMake Configure",
       "type": "shell",
-      "command": "cmake -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Debug -H${workspaceFolder} -B${workspaceFolder}/build -G \"Ninja Multi-Config\"",
+      "command": "cmake -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -H${workspaceFolder} -B${workspaceFolder}/build -G \"Ninja Multi-Config\"",
       "problemMatcher": []
     },
     {
