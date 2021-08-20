@@ -3,7 +3,7 @@
     "name": "vscode-qt-qml-vcpkg-template",
     "version-string": "0.0.1",
     "license": "MIT",
-    "builtin-baseline": "698c44440375cce33b6f671c87ad1705d943d327",
+    "builtin-baseline": "ab60f27567ec24ab97289fb7a1d8455c74bcad04",
     "dependencies": [
         {
             "name": "sqlite3",
